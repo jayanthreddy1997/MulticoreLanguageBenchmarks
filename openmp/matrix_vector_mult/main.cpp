@@ -1,18 +1,23 @@
 #include <iostream>
+#include <omp.h>
 
 using namespace std;
 
-void matrix_vec_mult_sequential(int m, int n, float** A, float* v, float* res) {
+double matrix_vec_mult_sequential(int m, int n, float** A, float* v, float* res) {
+    double start = omp_get_wtime();
     for (int i=0; i<m; i++) {
         res[i] = 0.0;
         for (int j=0; j<n; j++) {
             res[i] += A[i][j] * v[n];
         }
     }
+    double end = omp_get_wtime();
+    return (end-start);
 }
 
-void matrix_vec_mult_parallel(int m, int n, float** A, float* v, float* res, int thread_count) {
+double matrix_vec_mult_parallel(int m, int n, float** A, float* v, float* res, int thread_count) {
     int i, j;
+    double start = omp_get_wtime();
 #pragma omp parallel for num_threads(thread_count) \
         default(none) private(i, j) shared(A, v, res, m, n)
     for (i=0; i<m; i++) {
@@ -21,6 +26,8 @@ void matrix_vec_mult_parallel(int m, int n, float** A, float* v, float* res, int
             res[i] += A[i][j] * v[n];
         }
     }
+    double end = omp_get_wtime();
+    return (end-start);
 }
 
 float** get_matrix(int m, int n, bool random_init=false) {
@@ -65,7 +72,7 @@ int main() {
     printf("Running Matrix Vector multiplication.\nMatrix Size: %d x %d\nParallel Execution: %d\nThread Count: %d\n",
            m, n, run_parallel, run_parallel?n_threads:1);
 
-    run_parallel ? matrix_vec_mult_parallel(m, n, A, v, res, n_threads) : matrix_vec_mult_sequential(m, n, A, v, res);
-
+    double run_time = run_parallel ? matrix_vec_mult_parallel(m, n, A, v, res, n_threads) : matrix_vec_mult_sequential(m, n, A, v, res);
+    cout << "Runtime: " << run_time << "s" << endl;
     return 0;
 }

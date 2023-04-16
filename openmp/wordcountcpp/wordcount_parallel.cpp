@@ -13,27 +13,15 @@ struct num_words {
     long count = 0; //using a struct for the default value
 };
 
-void countWords(const vector<char*>& vec, size_t start, size_t end, unordered_map<string, num_words>& wordFreqMap) {
-    while (start <= end) {
-        ++wordFreqMap[vec[start]].count;
-        start += 1;
-    }
-}
 inline void countWord(const vector<string>& vec, size_t i,unordered_map<string, num_words>& wordFreqMap) {
 
     ++wordFreqMap[vec[i]].count;
 }
-void reduce_maps(unordered_map<string, num_words>& map1, unordered_map<string, num_words>& map2) {
-    for (pair<const string, num_words>& p : map2) {
-       map1[p.first].count += p.second.count;
-    }
-    // return map1;
-}
 
-// #pragma omp declare reduction(reduce_umap : \
-//     unordered_map<string, num_words> : \
-//     reduce_maps(omp_out, omp_in)) \
-//     initializer(omp_priv(omp_orig))
+#pragma omp declare reduction(reduce_umap : \
+    unordered_map<string, num_words> : \
+    omp_out.insert(omp_in.begin(), omp_in.end())) \
+    initializer(omp_priv = unordered_map<string, num_words>())
 
 int main(int argv, char** argc) {
     char delimiters[] = " \t\n,.:;";
@@ -51,33 +39,29 @@ int main(int argv, char** argc) {
         }
     }
     inp.close();
-    unordered_map<string, num_words> globalWordFreq;
+    unordered_map<string, num_words> wordFreq;
     omp_set_num_threads(stoi(argc[1]));
-    // #pragma omp parallel for private(wordFreq)
-    //     reduction(reduce_umap: globalWordFreq)
-    // for (size_t i = 0; i < vec.size(); i++) {
-    //     countWord(vec, i, wordFreq);
-
-    //     // cout << "\n" << wordFreq.size();
-    //     // globalWordFreq += wordFreq;
-    // }
     double start_time = omp_get_wtime();
-    #pragma omp parallel 
-    {
-        unordered_map<string, num_words> wordFreq;
-        #pragma omp for
-        for (size_t i = 0; i < vec.size(); i++) {
-            countWord(vec, i, wordFreq);
-        }
-        #pragma omp critical 
-        {
-            reduce_maps(globalWordFreq, wordFreq);
-        }
+    #pragma omp parallel for \
+        reduction(reduce_umap: wordFreq)
+    for (size_t i = 0; i < vec.size(); i++) {
+        countWord(vec, i, wordFreq);
     }
     double end_time = omp_get_wtime();
-    std::cout << "time taken: " << (end_time - start_time) << "\n";
-    // for (pair<const string, num_words>& p : globalWordFreq) {
-    //    cout << p.first << ": " << p.second.count << "\n";
+    // double start_time = omp_get_wtime();
+    // #pragma omp parallel 
+    // {
+    //     unordered_map<string, num_words> wordFreq;
+    //     #pragma omp for
+    //     for (size_t i = 0; i < vec.size(); i++) {
+    //         countWord(vec, i, wordFreq);
+    //     }
+    //     #pragma omp critical 
+    //     {
+    //         reduce_maps(globalWordFreq, wordFreq);
+    //     }
     // }
+    // double end_time = omp_get_wtime();
+    std::cout << "time taken: " << (end_time - start_time) << "\n";
     return 0;
 }

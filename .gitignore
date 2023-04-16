@@ -39,7 +39,7 @@ rust/removeduplicates/target
 rust/wordcount/target
 rust/wordcount/src/example.txt
 rust/removeduplicates/src/example.txt
-*target
+**/target
 *inp*
 **/.DS_Store
 main

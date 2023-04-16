@@ -3,7 +3,7 @@ use rayon::ThreadPoolBuilder;
 use std::collections::HashSet;
 use std::fs;
 use std::time::Instant;
-
+//gittrials
 fn main() {
     let contents = fs::read_to_string("src/example.txt").expect("Error reading file");
     let pool = ThreadPoolBuilder::new().num_threads(10).build().unwrap();

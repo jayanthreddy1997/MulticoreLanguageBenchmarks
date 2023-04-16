@@ -26,12 +26,15 @@ inline void countWord(const vector<string>& vec, size_t i,unordered_map<string, 
 int main(int argv, char** argc) {
     char delimiters[] = " \t\n,.:;";
     ifstream inp;
-    inp.open("inp.txt");
+    inp.open("example.txt");
     vector<string> vec; //TODO: reserve some capacity for this to avoid overhead when having to expand the vector
     string line;
     //assume that input has no gaps
     while (getline(inp, line)) {
         char* token = strtok(&line[0], delimiters);
+        if (token == 0) {
+            continue;
+        }
         string s = token;
         vec.push_back(token);
         while ((token = strtok(NULL, delimiters))) {

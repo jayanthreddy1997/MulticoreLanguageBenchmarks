@@ -1,38 +1,53 @@
-use ndarray::{arr2, Array2, Array1};
-use std::thread;
 use rayon::prelude::*;
 use rand;
 use std::time::Instant;
 
-fn matrix_vec_mult_sequential(m: usize, n: usize, A: &Array2<f64>, v: &Vec<f64>, res: &mut Vec<f64>) -> f64 {
+fn matrix_vec_mult_sequential(m: usize, n: usize, A: &Vec<Vec<f64>>, v: &Vec<f64>) -> Vec<f64> {
     let now = Instant::now();
-    for i in 0..m {
-        let mut sum: f64 = 0.0;
-        for j in 0..n {
-            sum += A[[i, j]] * v[j];
-        }
-        res[i] = sum;
-    }
+
+    let res = A.iter()
+        .map(|row| {
+            let mut sum: f64 = 0.0;
+            for i in 0..n {
+                sum += row[i] * v[i];
+            }
+            sum
+        })
+        .collect::<Vec<f64>>();
+
     let elapsed = now.elapsed();
-    return elapsed.as_secs_f64();
+    println!("Multiplication run time: {}s", elapsed.as_secs_f64());
+
+    return res;
 }
 
-fn matrix_vec_mult_parallel(m: usize, n: usize, A: &Array2<f64>, v: &Vec<f64>, res: &mut Vec<f64>, thread_count: usize) -> f64 {
+fn matrix_vec_mult_parallel(m: usize, n: usize, A: &Vec<Vec<f64>>, v: &Vec<f64>, thread_count: usize) -> Vec<f64> {
     rayon::ThreadPoolBuilder::new().num_threads(thread_count).build_global().unwrap();
 
     let now = Instant::now();
-    // TODO
+
+    let res = A.par_iter()
+        .map(|row| {
+            let mut sum: f64 = 0.0;
+            for i in 0..n {
+                sum += row[i] * v[i];
+            }
+            sum
+        })
+        .collect::<Vec<f64>>();
+
     let elapsed = now.elapsed();
-    return elapsed.as_secs_f64();
+    println!("Multiplication run time: {}s", elapsed.as_secs_f64());
+    return res;
 }
 
-fn get_matrix(m: usize, n: usize, random_init: bool) -> Array2<f64> {
-    let mut A: Array2<f64> = Array2::zeros((m, n));
+fn get_matrix(m: usize, n: usize, random_init: bool) -> Vec<Vec<f64>> {
+    let mut A: Vec<Vec<f64>> = vec![vec![0.0; n]; m];;
 
     if random_init {
         for i in 0..m {
             for j in 0..n {
-                A[[i, j]] = rand::random();
+                A[i][j] = rand::random();
             }
         }
     }
@@ -52,25 +67,23 @@ fn get_vec(m: usize, random_init: bool) -> Vec<f64> {
 }
 
 fn main() {
-    let m: usize = 1024;
-    let n: usize = 1024;
-    let run_parallel: bool = false;
+    let m: usize = 4096;
+    let n: usize = 4096;
+    let run_parallel: bool = true;
     let n_threads: usize = 10;
 
     println!("Initializing matrices.\n");
     let A= get_matrix(m, n, true);
     let v = get_vec(n, true);
-    let mut res = get_vec(m, false);
+    let mut res;
 
-    let run_time: f64;
     if !run_parallel {
         println!("Running Matrix Vector multiplication.\nMatrix Size: {} x {}\nParallel Execution: {}\n",
                m, n, run_parallel);
-        run_time = matrix_vec_mult_sequential(m, n, &A, &v, &mut res);
+        res = matrix_vec_mult_sequential(m, n, &A, &v);
     } else {
         println!("Running Matrix Vector multiplication.\nMatrix Size: {} x {}\nParallel Execution: {}\nThread Count: {}",
                m, n, run_parallel, n_threads);
-        run_time = matrix_vec_mult_parallel(m, n, &A, &v, &mut res, n_threads);
+        res = matrix_vec_mult_parallel(m, n, &A, &v, n_threads);
     }
-    println!("Run time: {}s", run_time);
 }

@@ -59,9 +59,9 @@ float* get_vector(int n, bool random_init=false) {
 
 int main() {
     // m*n Matrix multiplication with n*1 vector
-    int m = 10000;
-    int n = 100000;
-    bool run_parallel = false;
+    int m = 4096;
+    int n = 4096;
+    bool run_parallel = true;
     int n_threads = 10;
 
     printf("Initializing matrices.\n");

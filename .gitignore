@@ -33,6 +33,8 @@
 
 
 # Rust
+rust/*/target
+rust/*/Cargo.lock
 rust/target
 rust/Cargo.lock
 rust/removeduplicates/target

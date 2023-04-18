@@ -24,7 +24,16 @@ Note: All tunable parameters like enable/disable parallelism, number of threads 
 - Rust
   - Mandelbrot </br>
     Run Directory: <code>rust/mandelbrot</code> </br>
-    Command: <code>cargo run -r </code>
+    Command: 
+    - Serial: <code>cargo run -r -- s <max_iterations> </code>
+      e.g. <code>cargo run -r -- s 100 </code>
+    - Parallel: <code>cargo run -r -- p <n_threads> <max_iterations> </code>
+      e.g. <code>cargo run -r -- p 8 100 </code>
+
   - Matrix Vector multiplication </br>
     Run Directory: <code>rust/matrix_vector_mult</code> </br>
-    Command: <code>cargo run -r </code>
+    Command:
+    - Serial: <code>cargo run -r -- <n_rows> <n_cols> s </code>
+    e.g. <code>cargo run -r -- 1024 1024 s </code>
+    - Parallel: <code>cargo run -r -- <n_rows> <n_cols> p <n_threads> </code>
+      e.g. <code>cargo run -r -- 1024 1024 p 8 </code>

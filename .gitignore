@@ -41,7 +41,12 @@ rust/removeduplicates/target
 rust/wordcount/target
 rust/wordcount/src/example.txt
 rust/removeduplicates/src/example.txt
-
+**/target
+*inp*
+**/.DS_Store
 main
 main.dSYM
 .idea/
+rust/.DS_Store
+rust/wordcount/.DS_Store
+*.dSYM

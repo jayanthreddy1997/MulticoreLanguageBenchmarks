@@ -12,7 +12,7 @@ void matrix_vec_mult_sequential(int m, int n, float** A, float* v, float* res) {
         }
     }
     double end = omp_get_wtime();
-    printf("Serial matrix vector multiplication run time: %fs", (end-start));
+    printf("Serial matrix vector multiplication run time: %fs\n", (end-start));
 }
 
 void matrix_vec_mult_parallel(int m, int n, float** A, float* v, float* res, int thread_count) {
@@ -27,7 +27,7 @@ void matrix_vec_mult_parallel(int m, int n, float** A, float* v, float* res, int
         }
     }
     double end = omp_get_wtime();
-    printf("Parallel matrix vector multiplication run time: %fs", (end-start));
+    printf("Parallel matrix vector multiplication run time: %fs\n", (end-start));
 }
 
 float** get_matrix(int m, int n, bool random_init=false) {
@@ -59,8 +59,8 @@ float* get_vector(int n, bool random_init=false) {
 
 int main() {
     // m*n Matrix multiplication with n*1 vector
-    int m = 4096;
-    int n = 4096;
+    int m = 8192;
+    int n = 8192;
     bool run_parallel = true;
     int n_threads = 10;
 

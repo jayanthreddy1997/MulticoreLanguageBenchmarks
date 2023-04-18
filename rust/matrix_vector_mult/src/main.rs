@@ -67,8 +67,8 @@ fn get_vec(m: usize, random_init: bool) -> Vec<f64> {
 }
 
 fn main() {
-    let m: usize = 4096;
-    let n: usize = 4096;
+    let m: usize = 8192;
+    let n: usize = 8192;
     let run_parallel: bool = true;
     let n_threads: usize = 10;
 

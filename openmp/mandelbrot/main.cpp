@@ -15,7 +15,7 @@ double Y_MIN = -1.5;
 double Y_MAX = 1.5;
 int IMG_HEIGHT = 4096;
 int IMG_WIDTH = 4096;
-int MAX_ITERATIONS = 100;
+int max_iterations = 100;
 double DIVERGENCE_THRESHOLD = 4.0; // Absolute value after which the mandel set is assumed to diverge
 
 unsigned char double_to_unsignedchar(const double d)
@@ -100,11 +100,21 @@ void mandelbrot_parallel(double* out, int n_threads) {
 
 
 
-int main() {
+int main(int argc, char** argv) {
     // Tunable parameters
     bool run_parallel = true;
-    int n_threads = 10;
-    MAX_ITERATIONS = 100;
+    int n_threads = 8;
+    if (argc > 1) {
+        char *run_mode = argv[1];
+        if (run_mode[0]=='s') {
+            run_parallel = false;
+            max_iterations = atoi(argv[2]);
+        } else {
+            run_parallel = true;
+            n_threads = atoi(argv[2]);
+            max_iterations = atoi(argv[3]);
+        }
+    }
 
     double* output = new double[IMG_HEIGHT * IMG_WIDTH];
     memset(output, 0, IMG_HEIGHT * IMG_WIDTH * sizeof(double));

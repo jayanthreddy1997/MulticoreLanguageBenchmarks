@@ -57,12 +57,24 @@ float* get_vector(int n, bool random_init=false) {
 }
 
 
-int main() {
+int main(int argc, char** argv) {
     // m*n Matrix multiplication with n*1 vector
+
+    int n_threads = 8;
+    bool run_parallel = true;
     int m = 8192;
     int n = 8192;
-    bool run_parallel = true;
-    int n_threads = 10;
+    if (argc > 1) {
+        m = atoi(argv[1]);
+        n = atoi(argv[2]);
+        char *run_mode = argv[3];
+        if (run_mode[0] == 'p') {
+            run_parallel = true;
+            n_threads = atoi(argv[4]);
+        } else {
+            run_parallel = false;
+        }
+    }
 
     printf("Matrix Size: %d x %d\n Initializing matrices.\n", m, n);
     float** A = get_matrix(m, n, true);

@@ -32,8 +32,8 @@ void write_matrix_to_uint8(double* data, int h, int w, std::vector<uint8_t> &ima
     {
         x = double_to_unsignedchar(data[j]);
         image[i + 0] = x;
-        image[i + 1] = x;
-        image[i + 2] = x;
+        image[i + 1] = 0;
+        image[i + 2] = 0;
         image[i + 3] = 255;
         i += 4;
     }
@@ -53,7 +53,7 @@ double mandel(double c_re, double c_im) {
     double z_re_new, z_im_new;
     while (count < MAX_ITERATIONS) {
         if ((z_re*z_re + z_im*z_im) > DIVERGENCE_THRESHOLD) {
-            return 0.0;
+            break;
         }
         z_re_new = z_re*z_re - z_im*z_im;
         z_im_new = 2.0 * z_re * z_im;
@@ -61,7 +61,7 @@ double mandel(double c_re, double c_im) {
         z_im = z_im_new + c_im;
         count += 1;
     }
-    return 1.0;
+    return double(count)/double(MAX_ITERATIONS);
 }
 
 void mandelbrot_serial(double* out) {

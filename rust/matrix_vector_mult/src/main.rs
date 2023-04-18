@@ -1,6 +1,7 @@
 use rayon::prelude::*;
 use rand;
 use std::time::Instant;
+use std::env;
 
 fn matrix_vec_mult_sequential(m: usize, n: usize, A: &Vec<Vec<f64>>, v: &Vec<f64>) -> Vec<f64> {
     let now = Instant::now();
@@ -42,7 +43,7 @@ fn matrix_vec_mult_parallel(m: usize, n: usize, A: &Vec<Vec<f64>>, v: &Vec<f64>,
 }
 
 fn get_matrix(m: usize, n: usize, random_init: bool) -> Vec<Vec<f64>> {
-    let mut A: Vec<Vec<f64>> = vec![vec![0.0; n]; m];;
+    let mut A: Vec<Vec<f64>> = vec![vec![0.0; n]; m];
 
     if random_init {
         for i in 0..m {
@@ -67,10 +68,21 @@ fn get_vec(m: usize, random_init: bool) -> Vec<f64> {
 }
 
 fn main() {
-    let m: usize = 4096;
-    let n: usize = 4096;
-    let run_parallel: bool = true;
-    let n_threads: usize = 10;
+    let args: Vec<String> = env::args().collect();
+
+    let mut m: usize = 8192;
+    let mut n: usize = 8192;
+    let mut run_parallel: bool = true;
+    let mut n_threads: usize = 10;
+
+    if !args.is_empty() {
+        m = (&args[1]).parse::<usize>().unwrap();
+        n = (&args[2]).parse::<usize>().unwrap();
+        run_parallel = (&args[3]).parse::<char>().unwrap()=='p';
+        if run_parallel {
+            n_threads = (&args[4]).parse::<usize>().unwrap();
+        }
+    }
 
     println!("Initializing matrices.\n");
     let A= get_matrix(m, n, true);

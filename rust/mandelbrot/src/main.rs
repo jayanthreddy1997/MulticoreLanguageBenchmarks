@@ -2,7 +2,7 @@ use image::RgbImage;
 use std::time::Instant;
 use rayon::iter::ParallelIterator;
 use rayon::iter::IntoParallelIterator;
-
+use std::env;
 
 fn save_img(raw_data: &Vec<f64>, h: usize, w: usize, filename: &str) {
     let mut data: Vec<u8> = vec![0; h*w*3];
@@ -85,16 +85,28 @@ fn mandelbrot_parallel(x_min: f64, x_max: f64, y_min: f64, y_max: f64, img_heigh
 }
 
 fn main() {
-    let run_parallel: bool = true;
-    let n_threads: usize = 10;
+    let mut run_parallel: bool = true;
+    let mut n_threads: usize = 10;
     let img_height: usize = 4096;
     let img_width: usize = 4096;
     let x_min: f64 = -2.0;
     let x_max: f64 = 1.0;
     let y_min: f64 = -1.5;
     let y_max: f64 = 1.5;
-    let max_iterations = 100;
+    let mut max_iterations = 100;
     let divergence_threshold: f64 = 4.0;
+
+    let args: Vec<String> = env::args().collect();
+    if !args.is_empty() {
+        run_parallel = (&args[1]).parse::<char>().unwrap()=='p';
+
+        if run_parallel {
+            n_threads = (&args[2]).parse::<usize>().unwrap();
+            max_iterations = (&args[1]).parse::<usize>().unwrap();
+        } else {
+            max_iterations = (&args[1]).parse::<usize>().unwrap();
+        }
+    }
 
     if !run_parallel {
         println!("Running Mandelbrot in serial");

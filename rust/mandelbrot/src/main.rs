@@ -8,9 +8,9 @@ fn save_img(raw_data: &Vec<f64>, h: usize, w: usize, filename: &str) {
     let mut data: Vec<u8> = vec![0; h*w*3];
 
     for i in 0..h*w {
-        for j in 0..3 {
-            data[i*3 + j] = (raw_data[i].min(1.0).max(0.0) * 255.0).round() as u8;
-        }
+        data[i*3] = (raw_data[i].min(1.0).max(0.0) * 255.0).round() as u8;
+        data[i*3+1] = 0;
+        data[i*3+2] = 0;
     }
 
     let image = RgbImage::from_raw(h as u32, w as u32, data)
@@ -27,7 +27,7 @@ fn mandel(c_re: f64, c_im: f64, max_iterations: usize, divergence_threshold: f64
 
     while count < max_iterations {
         if (z_re*z_re + z_im*z_im) > divergence_threshold {
-            return 0.0;
+            break;
         }
         z_re_new = z_re*z_re - z_im*z_im;
         z_im_new = 2.0 * z_re * z_im;
@@ -35,7 +35,7 @@ fn mandel(c_re: f64, c_im: f64, max_iterations: usize, divergence_threshold: f64
         z_im = z_im_new + c_im;
         count += 1;
     }
-    return 1.0;
+    return count as f64/max_iterations as f64;
 }
 
 fn mandelbrot_serial(x_min: f64, x_max: f64, y_min: f64, y_max: f64, img_height: usize,

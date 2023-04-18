@@ -1,8 +1,10 @@
 use image::RgbImage;
 use std::time::Instant;
-use std::cmp::{min, max};
+use rayon::iter::ParallelIterator;
+use rayon::iter::IntoParallelIterator;
 
-fn save_img(raw_data: &mut Vec<f64>, h: usize, w: usize, filename: &str) {
+
+fn save_img(raw_data: &Vec<f64>, h: usize, w: usize, filename: &str) {
     let mut data: Vec<u8> = vec![0; h*w*3];
 
     for i in 0..h*w {
@@ -16,18 +18,70 @@ fn save_img(raw_data: &mut Vec<f64>, h: usize, w: usize, filename: &str) {
     image.save(filename);
 }
 
-fn mandelbrot_serial() {
+fn mandel(c_re: f64, c_im: f64, max_iterations: usize, divergence_threshold: f64) -> f64 {
+    let mut count: usize = 0;
+    let mut z_re: f64 = 0.0;
+    let mut z_im: f64 = 0.0;
+    let mut z_re_new: f64;
+    let mut z_im_new: f64;
+
+    while count < max_iterations {
+        if (z_re*z_re + z_im*z_im) > divergence_threshold {
+            return 0.0;
+        }
+        z_re_new = z_re*z_re - z_im*z_im;
+        z_im_new = 2.0 * z_re * z_im;
+        z_re = z_re_new + c_re;
+        z_im = z_im_new + c_im;
+        count += 1;
+    }
+    return 1.0;
+}
+
+fn mandelbrot_serial(x_min: f64, x_max: f64, y_min: f64, y_max: f64, img_height: usize,
+                     img_width: usize, max_iterations: usize, divergence_threshold: f64) -> Vec<f64> {
     let now = Instant::now();
+    let dx: f64 = (x_max - x_min) / (img_width as f64);
+    let dy: f64 = (y_max - y_min) / (img_height as f64);
+
+    let res: Vec<f64> = (0..(img_width*img_height)).into_iter()
+        .map(|i| {
+            mandel(
+                x_min + ((i % img_width) as f64) * dx,
+                y_min + ((i / img_width) as f64) * dy,
+                max_iterations,
+                divergence_threshold
+            )
+        })
+        .collect::<Vec<f64>>();
 
     let elapsed = now.elapsed();
     println!("Mandelbrot serial run time: {}s", elapsed.as_secs_f64());
+    return res;
 }
 
-fn mandelbrot_parallel() {
+fn mandelbrot_parallel(x_min: f64, x_max: f64, y_min: f64, y_max: f64, img_height: usize,
+                       img_width: usize, max_iterations: usize, divergence_threshold: f64, n_threads: usize) -> Vec<f64> {
+    rayon::ThreadPoolBuilder::new().num_threads(n_threads).build_global().unwrap();
+
     let now = Instant::now();
+    let dx: f64 = (x_max - x_min) / (img_width as f64);
+    let dy: f64 = (y_max - y_min) / (img_height as f64);
+
+    let res: Vec<f64> = (0..(img_width*img_height)).into_par_iter()
+        .map(|i| {
+            mandel(
+                x_min + ((i % img_width) as f64) * dx,
+                y_min + ((i / img_width) as f64) * dy,
+                max_iterations,
+                divergence_threshold
+            )
+        })
+        .collect::<Vec<f64>>();
 
     let elapsed = now.elapsed();
     println!("Mandelbrot parallel run time: {}s", elapsed.as_secs_f64());
+    return res;
 }
 
 fn main() {
@@ -41,11 +95,11 @@ fn main() {
     let max_iterations = 100;
     let divergence_threshold: f64 = 4.0;
 
-    let mut output: Vec<f64> = vec![0.0; img_height*img_width];
-    // mandelbrot_serial(output);
-    save_img(&mut output, img_height, img_width, "mandelbrol_rust_serial.png");
+    println!("Running Mandelbrot in serial");
+    let mut output_serial: Vec<f64> = mandelbrot_serial(x_min, x_max, y_min, y_max, img_height, img_width, max_iterations, divergence_threshold);
+    save_img(&output_serial, img_height, img_width, "mandelbrol_rust_serial.png");
 
-    // output = vec![0.0; img_height*img_width];
-    // mandelbrot_parallel(output, n_threads);
-    // save_img(output);
+    println!("Running Mandelbrot in parallel");
+    let mut output_parallel: Vec<f64> = mandelbrot_parallel(x_min, x_max, y_min, y_max, img_height, img_width, max_iterations, divergence_threshold, n_threads);
+    save_img(&output_parallel, img_height, img_width, "mandelbrol_rust_parallel.png");
 }

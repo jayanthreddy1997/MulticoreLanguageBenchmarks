@@ -51,10 +51,7 @@ double mandel(double c_re, double c_im) {
     double z_re = 0.0;
     double z_im = 0.0;
     double z_re_new, z_im_new;
-    while (true) {
-        if (count >= MAX_ITERATIONS) {
-            return 1.0;
-        }
+    while (count < MAX_ITERATIONS) {
         if ((z_re*z_re + z_im*z_im) > DIVERGENCE_THRESHOLD) {
             return 0.0;
         }
@@ -64,6 +61,7 @@ double mandel(double c_re, double c_im) {
         z_im = z_im_new + c_im;
         count += 1;
     }
+    return 1.0;
 }
 
 void mandelbrot_serial(double* out) {
@@ -112,10 +110,10 @@ int main() {
 
     printf("Running Mandelbrot in serial\n");
     mandelbrot_serial(output);
-    save_img(output, IMG_HEIGHT, IMG_WIDTH, "mandelbrot_omp_serial.png");
+    save_img(output, IMG_HEIGHT, IMG_WIDTH, (char*)"mandelbrot_omp_serial.png");
 
     memset(output, 0, IMG_HEIGHT * IMG_WIDTH * sizeof(double));
     cout << "Running Mandelbrot in parallel with " << n_threads << " threads" << endl;
     mandelbrot_parallel(output, n_threads);
-    save_img(output, IMG_HEIGHT, IMG_WIDTH,"mandelbrot_omp_parallel.png");
+    save_img(output, IMG_HEIGHT, IMG_WIDTH,(char*)"mandelbrot_omp_parallel.png");
 }

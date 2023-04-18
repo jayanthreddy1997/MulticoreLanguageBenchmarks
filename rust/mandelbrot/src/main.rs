@@ -85,6 +85,7 @@ fn mandelbrot_parallel(x_min: f64, x_max: f64, y_min: f64, y_max: f64, img_heigh
 }
 
 fn main() {
+    let run_parallel: bool = true;
     let n_threads: usize = 10;
     let img_height: usize = 4096;
     let img_width: usize = 4096;
@@ -95,11 +96,13 @@ fn main() {
     let max_iterations = 100;
     let divergence_threshold: f64 = 4.0;
 
-    println!("Running Mandelbrot in serial");
-    let mut output_serial: Vec<f64> = mandelbrot_serial(x_min, x_max, y_min, y_max, img_height, img_width, max_iterations, divergence_threshold);
-    save_img(&output_serial, img_height, img_width, "mandelbrol_rust_serial.png");
-
-    println!("Running Mandelbrot in parallel");
-    let mut output_parallel: Vec<f64> = mandelbrot_parallel(x_min, x_max, y_min, y_max, img_height, img_width, max_iterations, divergence_threshold, n_threads);
-    save_img(&output_parallel, img_height, img_width, "mandelbrol_rust_parallel.png");
+    if !run_parallel {
+        println!("Running Mandelbrot in serial");
+        let output_serial: Vec<f64> = mandelbrot_serial(x_min, x_max, y_min, y_max, img_height, img_width, max_iterations, divergence_threshold);
+        save_img(&output_serial, img_height, img_width, "mandelbrol_rust_serial.png");
+    } else {
+        println!("Running Mandelbrot in parallel");
+        let output_parallel: Vec<f64> = mandelbrot_parallel(x_min, x_max, y_min, y_max, img_height, img_width, max_iterations, divergence_threshold, n_threads);
+        save_img(&output_parallel, img_height, img_width, "mandelbrol_rust_parallel.png");
+    }
 }

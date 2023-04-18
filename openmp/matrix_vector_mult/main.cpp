@@ -3,7 +3,7 @@
 
 using namespace std;
 
-double matrix_vec_mult_sequential(int m, int n, float** A, float* v, float* res) {
+void matrix_vec_mult_sequential(int m, int n, float** A, float* v, float* res) {
     double start = omp_get_wtime();
     for (int i=0; i<m; i++) {
         res[i] = 0.0;
@@ -12,10 +12,10 @@ double matrix_vec_mult_sequential(int m, int n, float** A, float* v, float* res)
         }
     }
     double end = omp_get_wtime();
-    return (end-start);
+    printf("Serial matrix vector multiplication run time: %fs", (end-start));
 }
 
-double matrix_vec_mult_parallel(int m, int n, float** A, float* v, float* res, int thread_count) {
+void matrix_vec_mult_parallel(int m, int n, float** A, float* v, float* res, int thread_count) {
     int i, j;
     double start = omp_get_wtime();
 #pragma omp parallel for num_threads(thread_count) \
@@ -27,7 +27,7 @@ double matrix_vec_mult_parallel(int m, int n, float** A, float* v, float* res, i
         }
     }
     double end = omp_get_wtime();
-    return (end-start);
+    printf("Parallel matrix vector multiplication run time: %fs", (end-start));
 }
 
 float** get_matrix(int m, int n, bool random_init=false) {
@@ -64,15 +64,18 @@ int main() {
     bool run_parallel = true;
     int n_threads = 10;
 
-    printf("Initializing matrices.\n");
+    printf("Matrix Size: %d x %d\n Initializing matrices.\n", m, n);
     float** A = get_matrix(m, n, true);
     float* v = get_vector(n, true);
     float* res = get_vector(m, false);
 
-    printf("Running Matrix Vector multiplication.\nMatrix Size: %d x %d\nParallel Execution: %d\nThread Count: %d\n",
-           m, n, run_parallel, run_parallel?n_threads:1);
+    if (!run_parallel) {
+        printf("Running Serial Matrix Vector multiplication.\n");
+        matrix_vec_mult_sequential(m, n, A, v, res);
+    } else {
+        printf("Running Parallel Matrix Vector multiplication with %d threads\n", n_threads);
+        matrix_vec_mult_parallel(m, n, A, v, res, n_threads);
+    }
 
-    double run_time = run_parallel ? matrix_vec_mult_parallel(m, n, A, v, res, n_threads) : matrix_vec_mult_sequential(m, n, A, v, res);
-    cout << "Runtime: " << run_time << "s" << endl;
     return 0;
 }

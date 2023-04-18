@@ -102,18 +102,20 @@ void mandelbrot_parallel(double* out, int n_threads) {
 
 int main() {
     // Tunable parameters
+    bool run_parallel = true;
     int n_threads = 10;
     MAX_ITERATIONS = 100;
 
     double* output = new double[IMG_HEIGHT * IMG_WIDTH];
     memset(output, 0, IMG_HEIGHT * IMG_WIDTH * sizeof(double));
 
-    printf("Running Mandelbrot in serial\n");
-    mandelbrot_serial(output);
-    save_img(output, IMG_HEIGHT, IMG_WIDTH, (char*)"mandelbrot_omp_serial.png");
-
-    memset(output, 0, IMG_HEIGHT * IMG_WIDTH * sizeof(double));
-    cout << "Running Mandelbrot in parallel with " << n_threads << " threads" << endl;
-    mandelbrot_parallel(output, n_threads);
-    save_img(output, IMG_HEIGHT, IMG_WIDTH,(char*)"mandelbrot_omp_parallel.png");
+    if (!run_parallel) {
+        printf("Running Mandelbrot in serial\n");
+        mandelbrot_serial(output);
+        save_img(output, IMG_HEIGHT, IMG_WIDTH, (char *) "mandelbrot_omp_serial.png");
+    } else {
+        cout << "Running Mandelbrot in parallel with " << n_threads << " threads" << endl;
+        mandelbrot_parallel(output, n_threads);
+        save_img(output, IMG_HEIGHT, IMG_WIDTH, (char *) "mandelbrot_omp_parallel.png");
+    }
 }

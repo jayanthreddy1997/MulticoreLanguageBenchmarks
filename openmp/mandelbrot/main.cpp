@@ -16,7 +16,7 @@ double Y_MAX = 1.5;
 int IMG_HEIGHT = 4096;
 int IMG_WIDTH = 4096;
 int MAX_ITERATIONS = 100;
-double COMPUTATION_LIMIT = 4.0; // Absolute value after which the mandel set is assumed to diverge
+double DIVERGENCE_THRESHOLD = 4.0; // Absolute value after which the mandel set is assumed to diverge
 
 unsigned char double_to_unsignedchar(const double d)
 {
@@ -55,7 +55,7 @@ double mandel(double c_re, double c_im) {
         if (count >= MAX_ITERATIONS) {
             return 1.0;
         }
-        if ((z_re*z_re + z_im*z_im) > COMPUTATION_LIMIT) {
+        if ((z_re*z_re + z_im*z_im) > DIVERGENCE_THRESHOLD) {
             return 0.0;
         }
         z_re_new = z_re*z_re - z_im*z_im;

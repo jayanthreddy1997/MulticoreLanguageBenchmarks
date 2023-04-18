@@ -72,17 +72,29 @@ void mandelbrot_serial(double* out) {
     double dx = (X_MAX - X_MIN) / IMG_WIDTH;
     double dy = (Y_MAX - Y_MIN) / IMG_HEIGHT;
 
+    double x, y;
     for (int i = 0; i < IMG_HEIGHT*IMG_WIDTH; i++) {
-        double x = X_MIN + (i % IMG_WIDTH) * dx;
-        double y = Y_MIN + (i / IMG_WIDTH) * dy;
+        x = X_MIN + (i % IMG_WIDTH) * dx;
+        y = Y_MIN + (i / IMG_WIDTH) * dy;
         out[i] = mandel(x, y);
     }
     double end = omp_get_wtime();
     printf ("Mandelbrot serial execution time: %fs \n", end-start);
 }
 
-void mandelbrot_parallel(int n_threads) {
+void mandelbrot_parallel(double* out, int n_threads) {
     double start = omp_get_wtime();
+    double dx = (X_MAX - X_MIN) / IMG_WIDTH;
+    double dy = (Y_MAX - Y_MIN) / IMG_HEIGHT;
+
+    double x, y;
+    int i;
+#pragma omp parallel for num_threads(n_threads) default(none) private(i, x, y) shared(X_MIN, Y_MIN, dx, dy, IMG_HEIGHT, IMG_WIDTH, out)
+    for (i = 0; i < IMG_HEIGHT*IMG_WIDTH; i++) {
+        x = X_MIN + (i % IMG_WIDTH) * dx;
+        y = Y_MIN + (i / IMG_WIDTH) * dy;
+        out[i] = mandel(x, y);
+    }
 
     double end = omp_get_wtime();
     printf ("Mandelbrot parallel execution time: %fs \n", end-start);
@@ -104,6 +116,6 @@ int main() {
 
     memset(output, 0, IMG_HEIGHT * IMG_WIDTH * sizeof(double));
     cout << "Running Mandelbrot in parallel with " << n_threads << " threads" << endl;
-    mandelbrot_parallel(n_threads);
+    mandelbrot_parallel(output, n_threads);
     save_img(output, IMG_HEIGHT, IMG_WIDTH,"mandelbrot_omp_parallel.png");
 }

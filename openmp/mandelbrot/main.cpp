@@ -5,7 +5,7 @@
 #include <algorithm>
 #include <math.h>
 #define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "stb_image_write.h"
+#include "stb_image_write.h" // This has utility functions to save image array to png, Reference: Prof. Daniele Panozzo https://github.com/danielepanozzo/cg/tree/master/ext/stb
 
 using namespace std;
 

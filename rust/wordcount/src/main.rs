@@ -3,18 +3,14 @@ use rayon::ThreadPoolBuilder;
 use std::collections::HashMap;
 use std::fs;
 use std::time::Instant;
-use std::any::type_name;
-
-fn type_of<T>(_: T) -> &'static str {
-    type_name::<T>()
-}
-
-
+use std::env;
 fn main() {
+    let num_threads = env::args().nth(1).unwrap().parse:: <usize>().expect("not a proper string");
+
     //read the contents of the file as a string
     let contents = fs::read_to_string("src/example.txt").expect("Error reading file");
     //setup the number of threads you want to use
-    let thread_pool = ThreadPoolBuilder::new().num_threads(10).build().unwrap();
+    let thread_pool = ThreadPoolBuilder::new().num_threads(num_threads).build().unwrap();
     //use the threadpool for the following commands
     let now = Instant::now();
     let counts = thread_pool.install(|| {
@@ -37,7 +33,4 @@ fn main() {
     let elapsed = now.elapsed(); 
     println!("Elapsed: {:.2?}", elapsed);
     println!("{:#?}", counts.keys().len());
-    println!("The type of counts {}", type_of(counts));
-    
-    
 }

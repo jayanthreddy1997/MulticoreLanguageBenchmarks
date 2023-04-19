@@ -18,7 +18,7 @@ int IMG_WIDTH = 4096;
 int max_iterations = 100;
 double DIVERGENCE_THRESHOLD = 4.0; // Absolute value after which the mandel set is assumed to diverge
 bool dyn_scheduling = false;
-int dyn_sch_chunk_size = 128;
+int dyn_sch_chunk_size = 4096;
 
 unsigned char double_to_unsignedchar(const double d)
 {

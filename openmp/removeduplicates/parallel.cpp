@@ -45,8 +45,8 @@ int main(int argc, char** argv){
     // for (const string& word: hashset){
     //      cout<< word<< " \n";
     // }
-
-    cout << "\n" << hashset.size()<< "\n" << end-start << endl;
+    cout << "Parallel --> " << "Num Threads: " << numThreads << "File: " << filename;
+    cout << "\n" << end-start << "s\n" << hashset.size() << endl;
     
     return 0;
 }

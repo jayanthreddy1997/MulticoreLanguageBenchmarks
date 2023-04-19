@@ -36,7 +36,8 @@ int main(int argc, char** argv){
     //      cout<< word<< " \n";
     // }
 
-    cout << "\n" << hashset.size()<< "\n" << end-start << endl;
+    cout << "Sequntial ---> " << "File: " << filename;
+    cout << "\n" << end-start << "s\n" << hashset.size() << endl;
     
     return 0;
 }

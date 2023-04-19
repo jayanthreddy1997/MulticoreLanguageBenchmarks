@@ -8,7 +8,7 @@ use std::env;
 fn main() {
 
     let num_threads = env::args().nth(1).unwrap().parse:: <usize>().expect("not a proper string");
-    let contents = fs::read_to_string("src/example.txt").expect("Error reading file");
+    let contents = fs::read_to_string(env::args().nth(2).unwrap()).expect("Error reading file");
     let pool = ThreadPoolBuilder::new().num_threads(num_threads).build().unwrap();
     let now = Instant::now();
     let unique_words: HashSet<String> = pool

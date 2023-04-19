@@ -1,10 +1,11 @@
 use std::collections::HashSet;
 use std::fs;
 use std::time::Instant;
-
+use std::env;
 
 fn main() {
-    let contents = fs::read_to_string("src/example.txt").expect("Error reading file");
+    let filename = env::args().nth(1).unwrap();
+    let contents = fs::read_to_string(filename).expect("Error reading file");
     
     let now = Instant::now();
     let unique_words: HashSet<String> = contents    

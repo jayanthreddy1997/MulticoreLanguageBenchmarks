@@ -51,6 +51,8 @@ int main(int argv, char** argc) {
             countWord(vec, i, wordFreq);
         }
         end_time = omp_get_wtime();
+        cout << mode[0]  << " ---> " << "\tFile: " << argc[1];
+    
     } else {
         start_time = omp_get_wtime();
         omp_set_num_threads(stoi(argc[3]));
@@ -60,7 +62,9 @@ int main(int argv, char** argc) {
             countWord(vec, i, wordFreq);
         }
         end_time = omp_get_wtime();
+        cout << mode[0]  << " ---> " << "#Threads: " << stoi(argc[3]) << "\tFile: " << argc[1];
     }
-    std::cout << "time taken: " << (end_time - start_time) << "\n";
+    
+    cout << "\nTime Taken: " << end_time-start_time << "s\n" << wordFreq.size() << endl;
     return 0;
 }

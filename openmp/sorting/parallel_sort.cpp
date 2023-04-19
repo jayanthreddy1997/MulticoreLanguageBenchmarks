@@ -2,13 +2,19 @@
 #include <parallel/algorithm>
 #include <vector>
 #include <fstream>
+
 using namespace std;
-int main(int argv, char** argc) {
-    int N = stoi(argc[1]);
-    char* mode = argc[2];
+
+int main(int argc, char** argv) {
+    int N = stoi(argv[1]);
+    char* mode = argv[2];
+    char* sort_mode = (char*)"Q";
     int num_threads = 1;
     if (mode[0] == 'P') {
-        num_threads = stoi(argc[3]);
+        num_threads = stoi(argv[3]);
+        sort_mode = argv[4];
+    } else {
+        sort_mode = argv[3];
     }
     vector<int> vec;
     vec.reserve(N);
@@ -19,7 +25,11 @@ int main(int argv, char** argc) {
     if (mode[0] == 'P') {
         double start = omp_get_wtime();
         omp_set_num_threads(num_threads);
-        __gnu_parallel::sort(vec.begin(), vec.end(), __gnu_parallel::quicksort_tag());
+        if (sort_mode[0] == 'Q') {
+            __gnu_parallel::sort(vec.begin(), vec.end(), __gnu_parallel::quicksort_tag());
+        } else {
+            __gnu_parallel::sort(vec.begin(), vec.end(), __gnu_parallel::multiway_mergesort_tag());
+        }
         double end = omp_get_wtime();
         cout << (end - start) << "s" << "\n";
     } else {

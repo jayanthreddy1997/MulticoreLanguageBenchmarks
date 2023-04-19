@@ -35,6 +35,14 @@ Note: All tunable parameters like enable/disable parallelism, number of threads 
     Run:
       - Serial: <code> ./a.out <input_size> S Q </code>
       - Parallel: <code> ./a.out <input_size> P <num_threads> Q </code>
+  - Word Count
+    Run Directory: <code>openmp/wordcountcpp</code> </br>
+    Command: <code>g++ -fopenmp wordcount_parallel.cpp; </code> </br>
+    Run: 
+    - Serial: <code> ./a.out <filename> S </code> </br>
+      e.g. <code> ./a.out example.txt S </code>
+    - Parallel: <code> ./a.out <filename> P <n_threads> </code> </br>
+      e.g. <code>./a.out example.txt P 8</code>
     
 - Rust
   - Mandelbrot </br>

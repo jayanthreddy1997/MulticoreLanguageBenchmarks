@@ -6,7 +6,6 @@ use std::time::Instant;
 
 fn main() {
     let contents = fs::read_to_string("src/example.txt").expect("Error reading file");
-    
     let now = Instant::now();
     let counts = contents    
     .split_whitespace() // Split contents into words sequentially

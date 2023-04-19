@@ -23,19 +23,19 @@ Note: All tunable parameters like enable/disable parallelism, number of threads 
       e.g. <code> ./a.out 8192 8192 s </code>
     - Parallel: <code> ./a.out <n_rows> <n_cols> p <n_threads> </code> </br>
       e.g. <code>./a.out 8192 8192 p 8</code>
-  - Stable Sort (Merge Sort)
+  - Stable Sort (Merge Sort) </br>
     Run Directory: <code>openmp/sorting</code> </br>
     Compile: <code>g++ -fopenmp -O3 parallel_sort.cpp </code> </br>
     Run:
     - Serial: <code> ./a.out <input_size> S M </code>
     - Parallel: <code> ./a.out <input_size> P <num_threads> M </code>
-  - Unstable Sort (Quick Sort) 
+  - Unstable Sort (Quick Sort)  </br>
     Run Directory: <code>openmp/sorting</code> </br>
     Compile: <code>g++ -fopenmp -O3 parallel_sort.cpp </code> </br>
     Run:
       - Serial: <code> ./a.out <input_size> S Q </code>
       - Parallel: <code> ./a.out <input_size> P <num_threads> Q </code>
-  - Word Count
+  - Word Count </br>
     Run Directory: <code>openmp/wordcount</code> </br>
     Command: <code>g++ -fopenmp wordcount_SP.cpp </code> </br>
     Run: 
@@ -43,7 +43,7 @@ Note: All tunable parameters like enable/disable parallelism, number of threads 
       e.g. <code> ./a.out example.txt S </code>
     - Parallel: <code> ./a.out <file_name> P <n_threads> </code> </br>
       e.g. <code>./a.out example.txt P 8</code>
-  - Remove Duplicates
+  - Remove Duplicates </br>
     Run Directory: <code>openmp/removeduplicates</code> </br>
     Command Parallel: <code>g++ -fopenmp parallel.cpp - o parallel </code> </br>
     Command Sequential: <code>g++ -fopenmp sequential.cpp -o sequential </code> </br>
@@ -68,22 +68,22 @@ Note: All tunable parameters like enable/disable parallelism, number of threads 
     e.g. <code>cargo run -r -- 1024 1024 s </code>
     - Parallel: <code>cargo run -r -- <n_rows> <n_cols> p <n_threads> </code>
       e.g. <code>cargo run -r -- 1024 1024 p 8 </code>
-  - Stable Sort (Merge Sort)
+  - Stable Sort (Merge Sort) </br>
     Run Directory: <code>rust/sorting</code> </br>
     Command:
     - Serial: <code> cargo run -r -- <input_size> S M </code>
     - Parallel: <code> cargo run -r -- <input_size> P <num_threads> M </code>
-  - Unstable Sort (Quick Sort)
+  - Unstable Sort (Quick Sort) </br>
     Run Directory: <code>rust/sorting</code> </br>
     Command:
     - Serial: <code> cargo run -r -- <input_size> S Q </code>
     - Parallel: <code> cargo run -r -- <input_size> P <num_threads> Q </code>
-  - Word Count 
+  - Word Count  </br>
     Run Directory: <code> rust/wordcount</code> </br>
     Command:
     - Serial: <code> cargo run --release --bin sequential <file_name> </code>
     - Parallel: <code> cargo run --release --bin parallel <num_threads> <file_name> </code> 
-  - Remove Duplicates 
+  - Remove Duplicates  </br>
     Run Directory: <code> rust/removeduplicates</code> </br>
     Command:
     - Serial: <code> cargo run --release --bin sequential <file_name> </code>

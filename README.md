@@ -36,13 +36,22 @@ Note: All tunable parameters like enable/disable parallelism, number of threads 
       - Serial: <code> ./a.out <input_size> S Q </code>
       - Parallel: <code> ./a.out <input_size> P <num_threads> Q </code>
   - Word Count
-    Run Directory: <code>openmp/wordcountcpp</code> </br>
-    Command: <code>g++ -fopenmp wordcount_parallel.cpp; </code> </br>
+    Run Directory: <code>openmp/wordcount</code> </br>
+    Command: <code>g++ -fopenmp wordcount_SP.cpp; </code> </br>
     Run: 
     - Serial: <code> ./a.out <filename> S </code> </br>
       e.g. <code> ./a.out example.txt S </code>
     - Parallel: <code> ./a.out <filename> P <n_threads> </code> </br>
       e.g. <code>./a.out example.txt P 8</code>
+  - Remove Duplicates
+    Run Directory: <code>openmp/removeduplicates</code> </br>
+    Command Parallel: <code>g++ -fopenmp parallel.cpp - o parallel; </code> </br>
+    Command Sequential: <code>g++ -fopenmp sequential.cpp -o sequential; </code> </br>
+    Run: 
+    - Serial: <code> ./sequential <filename> </code> </br>
+      e.g. <code> ./sequential example.txt </code>
+    - Parallel: <code> ./parallel <n_threads> <filename> </code> </br>
+      e.g. <code>./parallel 8 example.txt </code>
     
 - Rust
   - Mandelbrot </br>
@@ -69,3 +78,14 @@ Note: All tunable parameters like enable/disable parallelism, number of threads 
     Command:
     - Serial: <code> cargo run -r -- <input_size> S Q </code>
     - Parallel: <code> cargo run -r -- <input_size> P <num_threads> Q </code>
+  - Word Count 
+    Run Directory: <code> rust/wordcount</code> </br>
+    Command:
+    - Serial: <code> cargo run --release --bin sequential <filename> </code>
+    - Parallel: <code> cargo run --release --bin parallel <num_threads> <filename> </code> 
+  - Remove Duplicates 
+    Run Directory: <code> rust/removeduplicates</code> </br>
+    Command:
+    - Serial: <code> cargo run --release --bin sequential <filename> </code>
+    - Parallel: <code> cargo run --release --bin parallel <num_threads> <filename> </code> 
+

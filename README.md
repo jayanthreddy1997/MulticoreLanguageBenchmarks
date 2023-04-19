@@ -39,18 +39,18 @@ Note: All tunable parameters like enable/disable parallelism, number of threads 
     Run Directory: <code>openmp/wordcount</code> </br>
     Command: <code>g++ -fopenmp wordcount_SP.cpp </code> </br>
     Run: 
-    - Serial: <code> ./a.out <filename> S </code> </br>
+    - Serial: <code> ./a.out <file_name> S </code> </br>
       e.g. <code> ./a.out example.txt S </code>
-    - Parallel: <code> ./a.out <filename> P <n_threads> </code> </br>
+    - Parallel: <code> ./a.out <file_name> P <n_threads> </code> </br>
       e.g. <code>./a.out example.txt P 8</code>
   - Remove Duplicates
     Run Directory: <code>openmp/removeduplicates</code> </br>
     Command Parallel: <code>g++ -fopenmp parallel.cpp - o parallel </code> </br>
     Command Sequential: <code>g++ -fopenmp sequential.cpp -o sequential </code> </br>
     Run: 
-    - Serial: <code> ./sequential <filename> </code> </br>
+    - Serial: <code> ./sequential <file_name> </code> </br>
       e.g. <code> ./sequential example.txt </code>
-    - Parallel: <code> ./parallel <n_threads> <filename> </code> </br>
+    - Parallel: <code> ./parallel <n_threads> <file_name> </code> </br>
       e.g. <code>./parallel 8 example.txt </code>
     
 - Rust
@@ -81,11 +81,11 @@ Note: All tunable parameters like enable/disable parallelism, number of threads 
   - Word Count 
     Run Directory: <code> rust/wordcount</code> </br>
     Command:
-    - Serial: <code> cargo run --release --bin sequential <filename> </code>
-    - Parallel: <code> cargo run --release --bin parallel <num_threads> <filename> </code> 
+    - Serial: <code> cargo run --release --bin sequential <file_name> </code>
+    - Parallel: <code> cargo run --release --bin parallel <num_threads> <file_name> </code> 
   - Remove Duplicates 
     Run Directory: <code> rust/removeduplicates</code> </br>
     Command:
-    - Serial: <code> cargo run --release --bin sequential <filename> </code>
-    - Parallel: <code> cargo run --release --bin parallel <num_threads> <filename> </code> 
+    - Serial: <code> cargo run --release --bin sequential <file_name> </code>
+    - Parallel: <code> cargo run --release --bin parallel <num_threads> <file_name> </code> 
 

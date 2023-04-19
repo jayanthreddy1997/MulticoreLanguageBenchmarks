@@ -87,7 +87,7 @@ void mandelbrot_parallel(double* out, int n_threads) {
 
     double x, y;
     int i;
-#pragma omp parallel for num_threads(n_threads) default(none) private(i, x, y) shared(X_MIN, Y_MIN, dx, dy, IMG_HEIGHT, IMG_WIDTH, out)
+#pragma omp parallel for schedule(dynamic, 1) num_threads(n_threads) default(none) private(i, x, y) shared(X_MIN, Y_MIN, dx, dy, IMG_HEIGHT, IMG_WIDTH, out)
     for (i = 0; i < IMG_HEIGHT*IMG_WIDTH; i++) {
         x = X_MIN + (i % IMG_WIDTH) * dx;
         y = Y_MIN + (i / IMG_WIDTH) * dy;

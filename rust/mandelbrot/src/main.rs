@@ -102,9 +102,9 @@ fn main() {
 
         if run_parallel {
             n_threads = (&args[2]).parse::<usize>().unwrap();
-            max_iterations = (&args[1]).parse::<usize>().unwrap();
+            max_iterations = (&args[3]).parse::<usize>().unwrap();
         } else {
-            max_iterations = (&args[1]).parse::<usize>().unwrap();
+            max_iterations = (&args[2]).parse::<usize>().unwrap();
         }
     }
 

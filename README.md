@@ -50,7 +50,7 @@ Note: All tunable parameters like enable/disable parallelism, number of threads 
     Run: 
     - Serial: <code> ./sequential <filename> </code> </br>
       e.g. <code> ./sequential example.txt </code>
-    - Parallel: <code> ./parallel <n_threads> <filename> </code> </br>
+    - Parallel: <code> ./parallel <n_threads> /<filename/> </code> </br>
       e.g. <code>./parallel 8 example.txt </code>
     
 - Rust

@@ -15,7 +15,7 @@ Note: All tunable parameters like enable/disable parallelism, number of threads 
       e.g. <code>./a.out s 100</code>
     - Parallel: <code> ./a.out p <n_threads> <max_iterations> </code>
       e.g. <code> ./a.out p 8 100 </code>
-  - Matrix Vector multiplication
+  - Matrix Vector multiplication  </br>
     Run Directory: <code>openmp/matrix_vector_mult</code> </br>
     Compile: <code>g++ -fopenmp -O3 main.cpp; </code> </br>
     Run: 

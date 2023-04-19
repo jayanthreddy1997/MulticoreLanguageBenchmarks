@@ -51,7 +51,7 @@ double mandel(double c_re, double c_im) {
     double z_re = 0.0;
     double z_im = 0.0;
     double z_re_new, z_im_new;
-    while (count < MAX_ITERATIONS) {
+    while (count < max_iterations) {
         if ((z_re*z_re + z_im*z_im) > DIVERGENCE_THRESHOLD) {
             break;
         }
@@ -61,7 +61,7 @@ double mandel(double c_re, double c_im) {
         z_im = z_im_new + c_im;
         count += 1;
     }
-    return double(count)/double(MAX_ITERATIONS);
+    return double(count)/double(max_iterations);
 }
 
 void mandelbrot_serial(double* out) {

@@ -1,6 +1,9 @@
 # MulticoreLanguageBenchmarks
 Performance benchmarks of multiple computer languages in a multicore setting
 
+g++ version: 12.2.0
+rust version: 1.68.1
+
 ## Run instructions
 Note: All tunable parameters like enable/disable parallelism, number of threads etc are hardcoded in first few lines of the main function of each experiment.
 - Openmp

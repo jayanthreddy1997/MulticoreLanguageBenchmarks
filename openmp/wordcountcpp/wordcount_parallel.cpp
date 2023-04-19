@@ -26,7 +26,7 @@ inline void countWord(const vector<string>& vec, size_t i,unordered_map<string, 
 int main(int argv, char** argc) {
     char delimiters[] = " \t\n,.:;";
     ifstream inp;
-    inp.open("example.txt");
+    inp.open(argc[1]);
     vector<string> vec; //TODO: reserve some capacity for this to avoid overhead when having to expand the vector
     string line;
     //assume that input has no gaps
@@ -43,28 +43,24 @@ int main(int argv, char** argc) {
     }
     inp.close();
     unordered_map<string, num_words> wordFreq;
-    omp_set_num_threads(stoi(argc[1]));
-    double start_time = omp_get_wtime();
-    #pragma omp parallel for \
-        reduction(reduce_umap: wordFreq)
-    for (size_t i = 0; i < vec.size(); i++) {
-        countWord(vec, i, wordFreq);
+    char* mode = argc[2];
+    double start_time, end_time;
+    if (mode[0] == 'S') {
+        start_time = omp_get_wtime();
+        for (size_t i = 0; i < vec.size(); i++) {
+            countWord(vec, i, wordFreq);
+        }
+        end_time = omp_get_wtime();
+    } else {
+        start_time = omp_get_wtime();
+        omp_set_num_threads(stoi(argc[3]));
+        #pragma omp parallel for \
+            reduction(reduce_umap: wordFreq)
+        for (size_t i = 0; i < vec.size(); i++) {
+            countWord(vec, i, wordFreq);
+        }
+        end_time = omp_get_wtime();
     }
-    double end_time = omp_get_wtime();
-    // double start_time = omp_get_wtime();
-    // #pragma omp parallel 
-    // {
-    //     unordered_map<string, num_words> wordFreq;
-    //     #pragma omp for
-    //     for (size_t i = 0; i < vec.size(); i++) {
-    //         countWord(vec, i, wordFreq);
-    //     }
-    //     #pragma omp critical 
-    //     {
-    //         reduce_maps(globalWordFreq, wordFreq);
-    //     }
-    // }
-    // double end_time = omp_get_wtime();
     std::cout << "time taken: " << (end_time - start_time) << "\n";
     return 0;
 }

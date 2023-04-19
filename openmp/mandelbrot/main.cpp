@@ -17,6 +17,8 @@ int IMG_HEIGHT = 4096;
 int IMG_WIDTH = 4096;
 int max_iterations = 100;
 double DIVERGENCE_THRESHOLD = 4.0; // Absolute value after which the mandel set is assumed to diverge
+bool dyn_scheduling = false;
+int dyn_sch_chunk_size = 128;
 
 unsigned char double_to_unsignedchar(const double d)
 {
@@ -87,11 +89,20 @@ void mandelbrot_parallel(double* out, int n_threads) {
 
     double x, y;
     int i;
-#pragma omp parallel for schedule(dynamic, 1) num_threads(n_threads) default(none) private(i, x, y) shared(X_MIN, Y_MIN, dx, dy, IMG_HEIGHT, IMG_WIDTH, out)
-    for (i = 0; i < IMG_HEIGHT*IMG_WIDTH; i++) {
-        x = X_MIN + (i % IMG_WIDTH) * dx;
-        y = Y_MIN + (i / IMG_WIDTH) * dy;
-        out[i] = mandel(x, y);
+    if (dyn_scheduling) {
+        #pragma omp parallel for schedule(dynamic, dyn_sch_chunk_size) num_threads(n_threads) default(none) private(i, x, y) shared(X_MIN, Y_MIN, dx, dy, IMG_HEIGHT, IMG_WIDTH, out, dyn_sch_chunk_size)
+        for (i = 0; i < IMG_HEIGHT * IMG_WIDTH; i++) {
+            x = X_MIN + (i % IMG_WIDTH) * dx;
+            y = Y_MIN + (i / IMG_WIDTH) * dy;
+            out[i] = mandel(x, y);
+        }
+    } else {
+        #pragma omp parallel for num_threads(n_threads) default(none) private(i, x, y) shared(X_MIN, Y_MIN, dx, dy, IMG_HEIGHT, IMG_WIDTH, out)
+        for (i = 0; i < IMG_HEIGHT * IMG_WIDTH; i++) {
+            x = X_MIN + (i % IMG_WIDTH) * dx;
+            y = Y_MIN + (i / IMG_WIDTH) * dy;
+            out[i] = mandel(x, y);
+        }
     }
 
     double end = omp_get_wtime();

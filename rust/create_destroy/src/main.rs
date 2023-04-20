@@ -5,7 +5,10 @@ fn main() {
     let num_threads = arg.expect("Need 'num_threads' as an argument!").parse::<usize>().ok().expect("num_threads has to be an integer!");
     let now = Instant::now();
     let pool = rayon::ThreadPoolBuilder::new().num_threads(num_threads).build().unwrap();
-    pool.install(|| 3+5);
+    pool.install(|| {
+        let x = 3 + 5;
+        x
+    });
     let elapsed = now.elapsed();
     println!("Elapsed during creation&destruction: {:.6?}", elapsed);
 }

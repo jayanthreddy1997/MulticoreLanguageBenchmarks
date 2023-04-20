@@ -31,13 +31,13 @@ fn main() {
         if sort_mode == 'Q' {
             vec.par_sort_unstable();
         } else {
-            vec.par_sort_stable();
+            vec.par_sort();
         }
     } else {
         if sort_mode == 'Q' {
             vec.sort_unstable();
         } else {
-            vec.sort_stable();
+            vec.sort();
         }
     }
     let elapsed = now.elapsed();

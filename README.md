@@ -52,7 +52,10 @@ Note: All tunable parameters like enable/disable parallelism, number of threads 
       e.g. <code> ./sequential example.txt </code>
     - Parallel: <code> ./parallel <n_threads> <file_name> </code> </br>
       e.g. <code>./parallel 8 example.txt </code>
-    
+  - Create-Destroy threads
+    Run Directory: <code>openmp/create_destroy</code> </br>
+    Compile: <code>g++ -fopenmp -O3 create_destroy.cpp </code> </br>
+    Run: <code> ./a.out <num_threads> </code>
 - Rust
   - Mandelbrot </br>
     Run Directory: <code>rust/mandelbrot</code> </br>
@@ -88,4 +91,6 @@ Note: All tunable parameters like enable/disable parallelism, number of threads 
     Command:
     - Serial: <code> cargo run --release --bin sequential <file_name> </code>
     - Parallel: <code> cargo run --release --bin parallel <num_threads> <file_name> </code> 
-
+  - Create-Destroy threads
+    Run Directory: <code>rust/create_destroy </code> </br>
+    Run: <code> cargo run -r -- <num_threads> </code>

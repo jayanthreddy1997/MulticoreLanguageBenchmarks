@@ -37,7 +37,7 @@ Note: All tunable parameters like enable/disable parallelism, number of threads 
       - Parallel: <code> ./a.out <input_size> P <num_threads> Q </code>
   - Word Count </br>
     Run Directory: <code>openmp/wordcount</code> </br>
-    Command: <code>g++ -fopenmp wordcount_SP.cpp </code> </br>
+    Command: <code>g++ -fopenmp -O3 wordcount_SP.cpp </code> </br>
     Run: 
     - Serial: <code> ./a.out <file_name> S </code> </br>
       e.g. <code> ./a.out example.txt S </code>
@@ -45,8 +45,8 @@ Note: All tunable parameters like enable/disable parallelism, number of threads 
       e.g. <code>./a.out example.txt P 8</code>
   - Remove Duplicates </br>
     Run Directory: <code>openmp/removeduplicates</code> </br>
-    Command Parallel: <code>g++ -fopenmp parallel.cpp - o parallel </code> </br>
-    Command Sequential: <code>g++ -fopenmp sequential.cpp -o sequential </code> </br>
+    Command Parallel: <code>g++ -fopenmp -O3 parallel.cpp -o parallel </code> </br>
+    Command Sequential: <code>g++ -fopenmp -O3 sequential.cpp -o sequential </code> </br>
     Run: 
     - Serial: <code> ./sequential <file_name> </code> </br>
       e.g. <code> ./sequential example.txt </code>

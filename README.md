@@ -1,5 +1,6 @@
 # MulticoreLanguageBenchmarks
-Performance benchmarks of multiple computer languages in a multicore setting
+Performance benchmarks of multiple computer languages in a multicore setting.
+Refer to the [report](Report.pdf) and [presentation](PresentationSlides.pdf) for more details.
 
 g++ version: 12.2.0
 rust version: 1.68.1

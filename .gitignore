@@ -56,3 +56,4 @@ main.dSYM
 rust/.DS_Store
 rust/wordcount/.DS_Store
 *.dSYM
+.vscode
